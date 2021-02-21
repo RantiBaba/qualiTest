@@ -1,0 +1,28 @@
+{
+  "name": "qualitestexam",
+  "version": "1.0.0",
+  "description": "qualitest technical test",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "cypress open"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  },
+  "keywords": [
+    "cypress",
+    "automation",
+    "test"
+  ],
+  "author": "Oluranti Otuyinka",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^6.5.0",
+    "faker": "^5.4.0",
+    "prettier": "^2.2.1",
+    "cypress-cucumber-preprocessor": "^3.0.0"
+  },
+  "dependencies": {
+    "cypress-plugin-tab": "^1.0.5"
+  }
+}
