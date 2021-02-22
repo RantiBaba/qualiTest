@@ -1,11 +1,11 @@
 import { randomFirstName, randomLastName, randomEmail, randomPassword, randomFullName, randomFirstNameChange, currentFullName } from './fakeData'
 
 let price
-let orderNumber
+
 
 export class automationPractice {
 
-
+    
 
     clickOnSignInButton() {
         cy.get(`[title="Log in to your customer account"]`).click()
@@ -78,18 +78,22 @@ export class automationPractice {
         cy.get('.cart_navigation > .button > span').click()
     }
 
-    viewShoppingCart() {
+
+    orderConfirmed() {
+        var orderReferenceNumber = ''
+
+        var price = ''
         cy.get('#total_price').then( totalPrice => {
 
             const totalPriceText = totalPrice.text().trim()
             price = totalPriceText
+            
+        } ).then(() => {
             cy.log(price)
-        } )
+        })
+    
 
         cy.get('[title="View my shopping cart"] > .ajax_cart_product_txt').should('contain.text', 'Product')
-    }
-
-    paymentMethod() {
 
         cy.get(`#HOOK_PAYMENT`).find('.bankwire').click()
         cy.get(`[class="box cheque-box"]`)
@@ -97,17 +101,41 @@ export class automationPractice {
         .and('include.text', 'You have chosen to pay by bank wire. Here is a short summary of your order:')
         cy.url().should('eq', 'http://automationpractice.com/index.php?fc=module&module=bankwire&controller=payment')
         cy.get('#cart_navigation > .button > span').click()
-    }
 
-    orderConfirmed() {
+
         cy.url().should('include', 'order-confirmation')
-        // cy.get('.box').then( textBox => {
-           // cy.wrap(textBox).
-       
-        // } )
+
+
+        cy.get('div.box').then($textBox => {
+
+            const textBoxText = $textBox.text()
+            var referenceText = textBoxText.substr(245,9)
+            orderReferenceNumber = referenceText
+            
+        }).then(() => {
+            cy.log(orderReferenceNumber)
+        })
+    
         cy.get(`[class="breadcrumb clearfix"]`).find(`[class="navigation_page"]`).should('include.text', 'Order confirmation')
         cy.get('.cheque-indent > .dark').should('contain.text', 'Your order on My Store is complete.')
         cy.get(`[title="View my shopping cart"]`).should('contain', '(empty)')
+        cy.get(`[title="View my customer account"]`).click()
+        cy.contains('Order history and details').click()
+        cy.get(`tr td:nth-child(1)`).each(($el, arrayIndex) => { 
+
+            const orderNumber = $el.text()
+        
+ 
+            if (orderNumber.includes(orderReferenceNumber)) { 
+ 
+                cy.get(`tr td:nth-child(1)`).eq(arrayIndex).next().next().then((totalPrice) => {
+                    const totalPriceText = totalPrice.text().trim()
+                    expect(totalPriceText).to.equal(price)
+                })
+         
+            }
+         })
+        
         
     }
 
@@ -127,20 +155,21 @@ export class automationPractice {
         })
     }
 
+
     myPersonalInformation() {
-        cy.get(`[title="Information"]`).click()
+   
+        cy.contains('My personal information').click()
         
     }
 
     updateFirstNameField() {
+
         cy.get(`#firstname`).clear().type(randomFirstNameChange)
         cy.get(`#old_passwd`).clear().type(randomPassword)
-
-    }
-
-    clickOnSaveButton () {
         cy.get(':nth-child(11) > .btn > span').click()
+
     }
+
 
     personalInfoUpdated() {
         cy.get(`p`)

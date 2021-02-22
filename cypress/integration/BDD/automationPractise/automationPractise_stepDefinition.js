@@ -3,88 +3,51 @@ import { practiceAutomation } from '../../../support/pageObjects/automationPract
 
 
 // Scenario: Order a TShirt
-Given(`that I am on the automation practice home page`, function() {
+
+Given(`that I have signed in as a customer`, function() {
 
     cy.visit(Cypress.env('baseUrl'))
 
 })
 
-When(`I click on the Sign In link`, function() {
-    
+When(`I make an order`, function() {
+
     practiceAutomation.clickOnSignInButton()
-    
-})
-
-And(`I enter my email address and click on the Create an account button`, function() {
     practiceAutomation.createAccountAuthentication()
-})
-
-
-And(`I enter required information into Your Personal Information section`, function() {
     practiceAutomation.personalInformationSection()
-
-})
-
-And(`I click on the Register button`, function(){
-
     practiceAutomation.personalInformationRegisterButton()
-})
-
-Then(`my account is created`, function() {
-
     practiceAutomation.newAccountCreated()
-
-})
-
-
-And(`I select a T-Shirt item and add to cart`, function() {
-
     practiceAutomation.clickOnTShirtLink()
     practiceAutomation.addItemToCart()
-})
 
-
-Then(`the item should be added to the cart`, function() {
-
-    practiceAutomation.viewShoppingCart()
-})
-
-
-And(`I select payment method and I click on the, I confirm order button`, function() {
-    practiceAutomation.paymentMethod()
 
 })
 
-Then(`the order is confirmed`, function() {
+Then(`My order is confirmed and seen in the Order History page`, function() {
 
     practiceAutomation.orderConfirmed()
+    
 })
-
 
 
 // Scenario: Update existing client's first name record
-Given(`that I am on My account link`, function() {
+
+Given(`that I am on Your Personal Information page`, function() {
 
     practiceAutomation.myAccountPage()
-})
-
-And(`I click on My Personal information link`, function() {
-
     practiceAutomation.myPersonalInformation()
 })
 
-And(`I update the First name field and I enter current password`, function() {
+When(`I update my first name record`, function() {
 
     practiceAutomation.updateFirstNameField()
 })
 
-And(`I click on the save button`, function() {
-    practiceAutomation.clickOnSaveButton()
-    
-})
 
 Then(`personal information should be updated`, function() {
+
     practiceAutomation.personalInfoUpdated()
-    
 })
+
+
 
