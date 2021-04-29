@@ -1,12 +1,9 @@
 import { randomFirstName, randomLastName, randomEmail, randomPassword, randomFullName, randomFirstNameChange, currentFullName } from './fakeData'
 
-let price
-
 
 export class automationPractice {
 
     
-
     clickOnSignInButton() {
         cy.get(`[title="Log in to your customer account"]`).click()
     }
@@ -80,9 +77,10 @@ export class automationPractice {
 
 
     orderConfirmed() {
-        var orderReferenceNumber = ''
 
+        var orderReferenceNumber = ''
         var price = ''
+        
         cy.get('#total_price').then( totalPrice => {
 
             const totalPriceText = totalPrice.text().trim()
