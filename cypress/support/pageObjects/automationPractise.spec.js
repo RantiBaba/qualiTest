@@ -119,14 +119,15 @@ export class automationPractice {
         cy.get(`[title="View my shopping cart"]`).should('contain', '(empty)')
         cy.get(`[title="View my customer account"]`).click()
         cy.contains('Order history and details').click()
-        cy.get(`tr td:nth-child(1)`).each(($el, arrayIndex) => { 
+        cy.get(`tr td:nth-child(1)`).as('firstTableRow').each(($el, arrayIndex) => { 
 
             const orderNumber = $el.text()
         
  
             if (orderNumber.includes(orderReferenceNumber)) { 
  
-                cy.get(`tr td:nth-child(1)`).eq(arrayIndex).next().next().then((totalPrice) => {
+                cy.get(`@firstTableRow`).eq(arrayIndex).next().next().then((totalPrice) => {
+                    cy.log($el, arrayIndex)
                     const totalPriceText = totalPrice.text().trim()
                     expect(totalPriceText).to.equal(price)
                 })
